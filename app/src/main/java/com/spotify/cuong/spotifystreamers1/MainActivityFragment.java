@@ -1,6 +1,5 @@
 package com.spotify.cuong.spotifystreamers1;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
@@ -133,21 +132,23 @@ public class MainActivityFragment extends Fragment {
 
         @Override
         protected List<Artist> doInBackground(String... artistName){
+            List<Artist> returnList = new ArrayList<Artist>();
             //set a delay time in case its being cancelled
             try {
                 Thread.sleep(50);
+
+                //calling spotify api and update searchResultAdapter
+                SpotifyApi api = new SpotifyApi();
+
+                SpotifyService spotify = api.getService();
+
+                ArtistsPager results = spotify.searchArtists(artistName[0]);
+
+                returnList =  results.artists.items;
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
-            //calling spotify api and update searchResultAdapter
-            SpotifyApi api = new SpotifyApi();
-
-            SpotifyService spotify = api.getService();
-
-            ArtistsPager results = spotify.searchArtists(artistName[0]);
-
-            return results.artists.items;
+            return returnList;
         }
 
         @Override
@@ -166,12 +167,5 @@ public class MainActivityFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        Log.d("Fragment.onRestore", "here");
-        if (savedInstanceState != null)
-            Log.d("Fragment.onRestore", "state is not null");
-        super.onViewStateRestored(savedInstanceState);
 
-    }
 }
