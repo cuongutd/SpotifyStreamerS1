@@ -85,7 +85,6 @@ public class MainActivityFragment extends Fragment {
                         searchText = newText;
                         if (task != null)
                             task.cancel(true); //cancel running task
-                        Log.d("afterTextChanged", "not saved state");
                         task = new SearchArtists();
                         task.execute(searchText);
 
