@@ -1,5 +1,6 @@
 package com.spotify.cuong.spotifystreamers1;
 
+import android.content.res.Configuration;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,19 +13,7 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState != null)
-            Log.d("Main.onCreate", "state is not null");
-
         setContentView(R.layout.activity_main);
-        Log.d("Main.onCreate", "here");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.d("Main.onRestore", "here");
-        if (savedInstanceState != null)
-            Log.d("Main.onRestore", "state is not null");
-        super.onRestoreInstanceState(savedInstanceState);
     }
 
     @Override

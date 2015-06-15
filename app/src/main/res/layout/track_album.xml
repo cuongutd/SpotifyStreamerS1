@@ -8,17 +8,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/trackImage"
         android:scaleType="centerCrop"
-        android:maxHeight="60dp"
-        android:maxWidth="60dp"
-        android:minHeight="60dp"
-        android:minWidth="60dp"
+        android:maxHeight="@dimen/d60"
+        android:maxWidth="@dimen/d60"
+        android:minHeight="@dimen/d60"
+        android:minWidth="@dimen/d60"
         android:src="@mipmap/ic_launcher"
         android:padding="5dp" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/d60"
         android:gravity="center_vertical"
         android:paddingLeft="10dp">
 

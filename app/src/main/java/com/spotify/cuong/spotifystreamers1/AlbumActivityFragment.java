@@ -27,8 +27,11 @@ import kaaes.spotify.webapi.android.models.Tracks;
  */
 public class AlbumActivityFragment extends Fragment {
 
+    public static final String BUNDLE_TEXT_TRACK_LIST = "BUNDLE_TEXT_TRACK_LIST";
+
     private TrackListAdapter trackListAdapter;
     private View rootView;
+    private ArrayList<MyTrack> myTracks;
 
     public AlbumActivityFragment() {
     }
@@ -40,48 +43,59 @@ public class AlbumActivityFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_album, container, false) ;
 
-        //initiate a blank result
-        trackListAdapter = new TrackListAdapter(getActivity().getApplicationContext(), R.layout.track_album, new ArrayList<Track>());
+        ListView v = (ListView) rootView.findViewById(R.id.trackListView);
 
-        ListView v = (ListView)rootView.findViewById(R.id.trackListView);
+        if (savedInstanceState != null)
+            myTracks = savedInstanceState.getParcelableArrayList(BUNDLE_TEXT_TRACK_LIST);
+        else
+            //initiate a blank result
+            myTracks = new ArrayList<MyTrack>();
 
+        trackListAdapter = new TrackListAdapter(getActivity().getApplicationContext(), R.layout.track_album, myTracks);
         v.setAdapter(trackListAdapter);
 
-        //get data from the intent and call spotify api to get top tracks
-        Intent intent = getActivity().getIntent();
+        if (savedInstanceState == null){
+            //get data from the intent and call spotify api to get top tracks
+            Intent intent = getActivity().getIntent();
 
-        String spotifyId = intent.getStringExtra(MainActivityFragment.SPOTIFY_ID);
-        String artistName = intent.getStringExtra(MainActivityFragment.ARTIST_NAME);
+            String spotifyId = intent.getStringExtra(MainActivityFragment.SPOTIFY_ID);
+            String artistName = intent.getStringExtra(MainActivityFragment.ARTIST_NAME);
 
-        new SearchToptracks().execute(spotifyId);
-
+            new SearchToptracks().execute(spotifyId);
+        }
         return rootView;
     }
 
-    public class SearchToptracks extends AsyncTask<String, Integer, List<Track>> {
+    public class SearchToptracks extends AsyncTask<String, Integer, List<MyTrack>> {
 
         private final String LOG_TAG = SearchToptracks.class.getSimpleName();
 
         @Override
-        protected List<Track> doInBackground(String... spotifyId){
+        protected List<MyTrack> doInBackground(String... spotifyId){
+            myTracks = new ArrayList<MyTrack>();
+
             //calling spotify api and update searchResultAdapter
             SpotifyApi api = new SpotifyApi();
 
             SpotifyService spotify = api.getService();
 
             Map<String, Object> options = new HashMap<>();
-            options.put(SpotifyService.COUNTRY, Locale.getDefault().getCountry());
-            Tracks results = spotify.getArtistTopTrack(spotifyId[0], options);
 
-            return results.tracks;
+            options.put(SpotifyService.COUNTRY, Locale.getDefault().getCountry());
+
+            Tracks sporityResults = spotify.getArtistTopTrack(spotifyId[0], options);
+
+            for (Track track : sporityResults.tracks)
+                myTracks.add(new MyTrack(track));
+            return myTracks;
         }
 
         @Override
-        protected void onPostExecute(List<Track> result) {
+        protected void onPostExecute(List<MyTrack> result) {
             trackListAdapter.clear();
             if (result.size()> 0)
                 trackListAdapter.addAll(result);
-            else{
+            else {
                 Utils.showMsg(getString(R.string.no_result_msg), getActivity());
             }
 
@@ -89,4 +103,11 @@ public class AlbumActivityFragment extends Fragment {
     }
 
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        outState.putParcelableArrayList(BUNDLE_TEXT_TRACK_LIST, myTracks);
+
+        super.onSaveInstanceState(outState);
+    }
 }

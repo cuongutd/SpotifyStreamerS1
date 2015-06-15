@@ -19,12 +19,12 @@ import kaaes.spotify.webapi.android.models.Image;
 /**
  * Created by Cuong on 6/11/2015.
  */
-public class ArtistListAdapter extends ArrayAdapter<Artist> {
+public class ArtistListAdapter extends ArrayAdapter<MyArtist> {
 
     Context context;
 
     public ArtistListAdapter(Context context, int resourceId, //resourceId=your layout
-                                 List<Artist> items) {
+                                 List<MyArtist> items) {
         super(context, resourceId, items);
         this.context = context;
     }
@@ -36,7 +36,7 @@ public class ArtistListAdapter extends ArrayAdapter<Artist> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        Artist rowItem = getItem(position);
+        MyArtist rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -50,12 +50,9 @@ public class ArtistListAdapter extends ArrayAdapter<Artist> {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        holder.txtTitle.setText(rowItem.name);
-        String imgUrl="";
-        for (Image img : rowItem.images)//get the last one which is smallest. if no image then no show
-            imgUrl = img.url;
-        if (imgUrl.length()> 0)
-            Picasso.with(context).load(imgUrl).into(holder.imageView);
+        holder.txtTitle.setText(rowItem.getArtistName());
+        if (!Utils.isEmptyString(rowItem.getThumbnailUrl()))
+            Picasso.with(context).load(rowItem.getThumbnailUrl()).into(holder.imageView);
         else
             holder.imageView.setImageDrawable(null);
 

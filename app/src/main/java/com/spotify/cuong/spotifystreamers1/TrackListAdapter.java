@@ -19,11 +19,11 @@ import kaaes.spotify.webapi.android.models.Track;
 /**
  * Created by Cuong on 6/11/2015.
  */
-public class TrackListAdapter extends ArrayAdapter<Track> {
+public class TrackListAdapter extends ArrayAdapter<MyTrack> {
     Context context;
 
     public TrackListAdapter(Context context, int resourceId, //resourceId=your layout
-                             List<Track> items) {
+                             List<MyTrack> items) {
         super(context, resourceId, items);
         this.context = context;
     }
@@ -36,7 +36,7 @@ public class TrackListAdapter extends ArrayAdapter<Track> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
-        Track rowItem = getItem(position);
+        MyTrack rowItem = getItem(position);
 
         LayoutInflater mInflater = (LayoutInflater) context
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
@@ -51,15 +51,12 @@ public class TrackListAdapter extends ArrayAdapter<Track> {
         } else
             holder = (ViewHolder) convertView.getTag();
 
-        holder.txtAlbum.setText(rowItem.album.name);
-        holder.txtTrack.setText(rowItem.name);
+        holder.txtAlbum.setText(rowItem.getAlbumName());
+        holder.txtTrack.setText(rowItem.getTrackName());
 
 
-        String imgUrl="";
-        for (Image img : rowItem.album.images)//get the last one which is smallest. if no image then no show
-            imgUrl = img.url;
-        if (imgUrl.length()> 0)
-            Picasso.with(context).load(imgUrl).into(holder.imageView);
+        if (!Utils.isEmptyString(rowItem.getTrackImageUrl()))
+            Picasso.with(context).load(rowItem.getTrackImageUrl()).into(holder.imageView);
         else
             holder.imageView.setImageDrawable(null);
 
