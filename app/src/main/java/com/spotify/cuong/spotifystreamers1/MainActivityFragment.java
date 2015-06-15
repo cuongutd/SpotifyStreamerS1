@@ -20,9 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
+import retrofit.RetrofitError;
 
 
 /**
@@ -85,7 +87,6 @@ public class MainActivityFragment extends Fragment {
                         searchText = newText;
                         if (task != null)
                             task.cancel(true); //cancel running task
-                        Log.d("afterTextChanged", "not saved state");
                         task = new SearchArtists();
                         task.execute(searchText);
 
@@ -137,12 +138,18 @@ public class MainActivityFragment extends Fragment {
                 SpotifyService spotify = api.getService();
 
                 ArtistsPager results = spotify.searchArtists(artistName[0]);
-                for (Artist artist : results.artists.items)
-                    returnList.add(new MyArtist((artist)));
+
+                if (results!= null)
+                    for (Artist artist : results.artists.items)
+                        returnList.add(new MyArtist((artist)));
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } catch (RetrofitError error){
+                SpotifyError spotifyError = SpotifyError.fromRetrofitError(error);
+                spotifyError.printStackTrace();
             }
+
             return returnList;
         }
 

@@ -20,6 +20,7 @@ import kaaes.spotify.webapi.android.SpotifyApi;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Track;
 import kaaes.spotify.webapi.android.models.Tracks;
+import retrofit.RetrofitError;
 
 
 /**
@@ -74,19 +75,23 @@ public class AlbumActivityFragment extends Fragment {
         protected List<MyTrack> doInBackground(String... spotifyId){
             myTracks = new ArrayList<MyTrack>();
 
-            //calling spotify api and update searchResultAdapter
-            SpotifyApi api = new SpotifyApi();
+            try {
+                //calling spotify api and update searchResultAdapter
+                SpotifyApi api = new SpotifyApi();
 
-            SpotifyService spotify = api.getService();
+                SpotifyService spotify = api.getService();
 
-            Map<String, Object> options = new HashMap<>();
+                Map<String, Object> options = new HashMap<>();
 
-            options.put(SpotifyService.COUNTRY, Locale.getDefault().getCountry());
+                options.put(SpotifyService.COUNTRY, Locale.getDefault().getCountry());
 
-            Tracks sporityResults = spotify.getArtistTopTrack(spotifyId[0], options);
-
-            for (Track track : sporityResults.tracks)
-                myTracks.add(new MyTrack(track));
+                Tracks sporityResults = spotify.getArtistTopTrack(spotifyId[0], options);
+                if (sporityResults != null)
+                    for (Track track : sporityResults.tracks)
+                        myTracks.add(new MyTrack(track));
+            }catch(RetrofitError error){
+                error.printStackTrace();
+            }
             return myTracks;
         }
 

@@ -15,11 +15,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:contentDescription="@string/searchBoxDesc"
         android:layout_alignRight="@+id/artistList"
         android:layout_alignEnd="@+id/artistList"
-        android:hint="Search artist"
-        android:selectAllOnFocus="true" />
+        android:hint="@string/searchhint"
+        android:selectAllOnFocus="true"/>
 
     <ListView
         android:layout_width="wrap_content"

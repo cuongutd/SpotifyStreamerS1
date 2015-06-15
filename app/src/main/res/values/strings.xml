@@ -5,4 +5,5 @@
     <string name="title_activity_album">Top 10 Tracks</string>
     <string name="no_result_msg">No result</string>
     <string name="rightArrow"><![CDATA[>]]></string>
+    <string name="searchhint">Search artist</string>
 </resources>
