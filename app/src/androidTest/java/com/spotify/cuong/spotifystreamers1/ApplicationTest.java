@@ -10,4 +10,16 @@ public class ApplicationTest extends ApplicationTestCase<Application> {
     public ApplicationTest() {
         super(Application.class);
     }
+
+    public static void test(){
+        String v = formatDuration(61345);
+        System.out.println(v);
+    }
+    private static String formatDuration(int currentPosition){
+        //to make it simple assuming all preview musics have less than 1 hour playback
+        int minute = currentPosition/1000/60;
+        int second = (currentPosition/1000) % 60;
+
+        return String.valueOf(minute) + ":" +String.valueOf(String.format("%2s", second).replace(" ", "0"));
+    }
 }

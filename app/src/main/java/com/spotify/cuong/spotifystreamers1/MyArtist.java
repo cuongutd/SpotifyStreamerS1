@@ -53,6 +53,7 @@ public class MyArtist implements Parcelable {
     }
 
     protected MyArtist(Parcel in) {
+        spotifyId = in.readString();
         artistName = in.readString();
         thumbnailUrl = in.readString();
     }
@@ -64,6 +65,7 @@ public class MyArtist implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(spotifyId);
         dest.writeString(artistName);
         dest.writeString(thumbnailUrl);
     }

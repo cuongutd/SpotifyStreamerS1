@@ -34,20 +34,21 @@ public class MainActivityFragment extends Fragment {
 
     private final String LOG_TAG = MainActivityFragment.class.getSimpleName();
 
-    public static final String SPOTIFY_ID = "SPOTIFY_ID";
-    public static final String ARTIST_NAME = "ARTIST_NAME";
-
+    //to save/restore search result when rotation/back/up
     public static final String BUNDLE_TEXT_ARTIST_LIST = "BUNDLE_TEXT_ARTIST_LIST";
     public static final String BUNDLE_TEXT_SEARCH_TEXT = "BUNDLE_TEXT_SEARCH_TEXT";
+    public static final String BUNDLE_TEXT_ITEM_POSITION = "BUNDLE_TEXT_ITEM_POSITION";
+
+    private ArrayList<MyArtist> myArtists;
+    private String searchText;
+    private int mSelectedItemPosition;
 
     private View rootView;
+    private EditText artistNameSearch;
     private ArtistListAdapter searchResultAdapter;
     private Toast msgToast;
     private AsyncTask<String, Integer, List<MyArtist>> task;
 
-    //used to save instances
-    private ArrayList<MyArtist> myArtists;
-    private String searchText;
 
     public MainActivityFragment() {
     }
@@ -56,6 +57,8 @@ public class MainActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        Log.d(LOG_TAG, "onCreateView");
+
         rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         ListView v = (ListView) rootView.findViewById(R.id.artistList);
@@ -63,6 +66,8 @@ public class MainActivityFragment extends Fragment {
         if (savedInstanceState != null) {
             myArtists = savedInstanceState.getParcelableArrayList(BUNDLE_TEXT_ARTIST_LIST);
             searchText = savedInstanceState.getString(BUNDLE_TEXT_SEARCH_TEXT);
+            mSelectedItemPosition = savedInstanceState.getInt(BUNDLE_TEXT_ITEM_POSITION);
+            v.smoothScrollToPosition(mSelectedItemPosition);
         }
         else {
             //initiate a blank result
@@ -70,17 +75,34 @@ public class MainActivityFragment extends Fragment {
             searchText = "";
         }
 
+        //for each search result, register a listener which will open artist detail screen
+        v.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                mSelectedItemPosition = position;
+
+                MyArtist artist = searchResultAdapter.getItem(position);
+
+                Bundle artistInfo = new Bundle();
+
+                artistInfo.putParcelable(Constants.BUNDLE_TEXT_ARTIST, artist);
+
+                ((Callback)getActivity()).onItemSelected(artistInfo);
+
+            }
+        });
+
         searchResultAdapter = new ArtistListAdapter(getActivity().getApplicationContext(), R.layout.artist_main, myArtists);
         v.setAdapter(searchResultAdapter);
 
-
-        //artistNameSearch.setText(searchText);
         //find the search textbox and register the listener, which will call spotify web service to get search result when txt change
-        EditText artistNameSearch = (EditText)rootView.findViewById(R.id.artistNameSearch);
-
+        artistNameSearch = (EditText)rootView.findViewById(R.id.artistNameSearch);
+        artistNameSearch.clearFocus();
         artistNameSearch.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
+                Log.d(LOG_TAG, "afterTextChanged");
                 String newText = s.toString();
                 if (!searchText.equals(newText)) //screen rotation also trigger this afterTextChanged. this if is to prevent from firing another spotify request
                     if (newText.length() > 2) { //dont search for short text
@@ -94,28 +116,13 @@ public class MainActivityFragment extends Fragment {
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d(LOG_TAG, "beforeTextChanged");
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(LOG_TAG, "onTextChanged");
             }
         });
-
-
-        //for each search result, register a listener which will open artist detail screen
-        v.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                MyArtist artist = searchResultAdapter.getItem(position);
-
-                //call detail activity
-                Intent topTracks = new Intent(getActivity(), AlbumActivity.class).putExtra(SPOTIFY_ID, artist.getSpotifyId()).putExtra(ARTIST_NAME, artist.getArtistName());
-                //detailWeather.setData(Uri.parse(fileUrl));
-                getActivity().startActivity(topTracks);
-
-            }
-        });
-
 
 
         return rootView;
@@ -174,6 +181,7 @@ public class MainActivityFragment extends Fragment {
 
         outState.putParcelableArrayList(BUNDLE_TEXT_ARTIST_LIST, myArtists);
         outState.putString(BUNDLE_TEXT_SEARCH_TEXT, searchText);
+        outState.putInt(BUNDLE_TEXT_ITEM_POSITION, mSelectedItemPosition);
         super.onSaveInstanceState(outState);
     }
 }

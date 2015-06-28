@@ -1,50 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_selector"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/artistImage"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:src="@mipmap/ic_launcher"
-        android:minHeight="40dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
         android:maxHeight="60dp"
         android:maxWidth="60dp"
+        android:minHeight="40dp"
         android:minWidth="40dp"
+        android:padding="5dp"
         android:scaleType="centerCrop"
-        android:padding="5dp" />
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/artistName"
-        android:layout_alignBottom="@+id/artistImage"
-        android:layout_toRightOf="@+id/artistImage"
-        android:layout_toEndOf="@+id/artistImage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="10"
+        android:gravity="center_vertical"
         android:minHeight="40dp"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentLeft="false"
-        android:textAlignment="center"
-        android:textSize="14sp"
         android:paddingLeft="10dp"
-        android:layout_alignWithParentIfMissing="false"
-        android:gravity="center_vertical" />
+        android:textAlignment="center"
+        android:textSize="@dimen/abc_text_size_subhead_material" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/rightArrow"
         android:id="@+id/arrow"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:gravity="center_vertical"
-        android:textSize="18sp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center|right"
         android:minHeight="40dp"
-        android:layout_centerVertical="true" />
-</RelativeLayout>
+        android:text="@string/rightArrow"
+        android:textSize="@dimen/abc_text_size_large_material" />
+</LinearLayout>

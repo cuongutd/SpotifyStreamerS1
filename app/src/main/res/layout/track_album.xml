@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:background="@drawable/touch_selector">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -18,22 +22,24 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/d60"
-        android:gravity="center_vertical"
-        android:paddingLeft="10dp">
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/albumText"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="@dimen/abc_text_size_subhead_material" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:id="@+id/trackName" />
+            android:id="@+id/trackName"
+            android:textSize="@dimen/abc_text_size_small_material" />
     </LinearLayout>
 
 </LinearLayout>
