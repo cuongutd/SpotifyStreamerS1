@@ -137,12 +137,12 @@ public class MyActionBarActivity extends ActionBarActivity{
     }
 
     protected void controlNowPlaying(){
-//        if( mMenu != null)
+        if( mMenu != null)
 //            if (((MyApplication)getApplication()).getMediaPlayer() != null
 //                /*&&  ((MyApplication)getApplication()).getMediaPlayer().isPlaying()*/)
 //                mMenu.findItem(R.id.menu_item_now_playing).setVisible(true);
 //            else
-//                mMenu.findItem(R.id.menu_item_now_playing).setVisible(false);
+                mMenu.findItem(R.id.menu_item_now_playing).setVisible(false);
 
     }
 
